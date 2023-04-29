@@ -1,8 +1,7 @@
 class UsersController < ApplicationController
 
-  require 'byebug'
-
   def create
+    data = request.params
     data = JSON.parse(request.body.read)
     @user = User.new(user_params(data))
     if @user.save
@@ -11,10 +10,10 @@ class UsersController < ApplicationController
       render json: { errors: @user.errors.full_messages }, status: :unprocessable_entity
     end
   end
-  
+
   private
-  
   def user_params(data)
     ActionController::Parameters.new(data).permit(:email, :password)
   end
+
 end
