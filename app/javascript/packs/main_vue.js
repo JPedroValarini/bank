@@ -3,6 +3,7 @@ import App from '../app.vue'
 import Register from '../pages/Register'
 import Home from '../pages/Home'
 import Login from '../pages/Login'
+import Header from '../components/Header'
 
 document.addEventListener('DOMContentLoaded', () => {
   const app = new Vue({
@@ -11,6 +12,6 @@ document.addEventListener('DOMContentLoaded', () => {
       return {
       };
     },
-      components: { App, Register, Home, Login }
+      components: { App, Register, Home, Login, Header }
   })
 })

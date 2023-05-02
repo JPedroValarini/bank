@@ -68,9 +68,6 @@ export default {
         }
       })
       .then(response => {
-        // Handle success response
-        console.log(response.data);
-        console.log(response.status);
         if (response.status === 200) {
           window.location.href = '/';
         }

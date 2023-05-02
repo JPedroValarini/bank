@@ -9,4 +9,5 @@ Rails.application.routes.draw do
   #POST
   post 'users/create', to: 'users#create', as: 'users/create'
   post 'login/create', to: 'login#create', as: 'login/create'
+  post 'login/destroy', to: 'login#destroy', as: 'login/destroy'
 end
