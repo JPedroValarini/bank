@@ -2,7 +2,7 @@
   <div id="app" class="container d-flex justify-content-center align-items-center vh-100">
     <div class="card">
       <div class="card-body">
-        <h2 class="text-center mb-4">Register</h2>
+        <h2 class="text-center mb-4">Registrar</h2>
         <form>
           <div class="form-group">
             <label>Email</label>
@@ -44,14 +44,14 @@ export default {
       })
         .then(response => {
           if (response.ok) {
+            window.location.href = '/login';
             return response.json();
           } else {
             throw new Error("Erro ao tentar fazer register");
           }
         })
         .then(data => {
-          console.log(data);
-          // Aqui você pode redirecionar o usuário para a página principal do seu aplicativo
+          window.location.href = '/';
         })
         .catch(error => {
           console.error(error);

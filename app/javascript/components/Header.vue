@@ -1,23 +1,16 @@
 <template>
-  <nav class="navbar navbar-expand-lg navbar-light bg-light">
-    <a class="navbar-brand" href="#">Home</a>
-    <button
-      class="navbar-toggler"
-      type="button"
-      data-toggle="collapse"
-      data-target="#navbarNav"
-      aria-controls="navbarNav"
-      aria-expanded="false"
-      aria-label="Toggle navigation"
-    >
-      <span class="navbar-toggler-icon"></span>
-    </button>
-    <div class="collapse navbar-collapse" id="navbarNav">
-      <ul class="navbar-nav ml-auto">
-        <li class="nav-item">
-          <button class="btn btn-outline-secondary" @click="logout()">Logout</button>
-        </li>
-      </ul>
+  <nav class="navbar navbar-expand-lg navbar-light bg-light justify-content-end">
+    <div class="d-flex">
+      <div class="container">
+        <a class="navbar-brand" href="#">Home</a>
+      </div>
+      <div class="collapse navbar-collapse container" id="navbarNav">
+        <ul class="navbar-nav">
+          <li class="nav-item">
+            <button class="btn btn-outline-secondary" @click="logout()">Logout</button>
+          </li>
+        </ul>
+      </div>
     </div>
   </nav>
 </template>

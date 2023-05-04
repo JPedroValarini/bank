@@ -1,6 +1,15 @@
 Rails.application.routes.draw do
 
   resources :users, only: [:create]
+
+  resources :accounts, only: [:create] do
+    member do
+      put :deposit
+      put :withdraw
+      put :transfer
+    end
+  end
+
   root 'home#index'
   get '/', to: 'home#index', as: '/'
   get 'register', to: 'register#index', as: 'register'
