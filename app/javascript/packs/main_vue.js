@@ -3,7 +3,10 @@ import App from '../app.vue'
 import Register from '../pages/Register'
 import Home from '../pages/Home'
 import Login from '../pages/Login'
+import Account from '../pages/Account'
 import Header from '../components/Header'
+import toastr from 'toastr'
+window.toastr = toastr
 
 document.addEventListener('DOMContentLoaded', () => {
   const app = new Vue({
@@ -12,6 +15,6 @@ document.addEventListener('DOMContentLoaded', () => {
       return {
       };
     },
-      components: { App, Register, Home, Login, Header }
+      components: { App, Register, Home, Login, Header, Account }
   })
 })

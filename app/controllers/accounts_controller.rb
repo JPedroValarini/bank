@@ -1,10 +1,20 @@
 class AccountsController < ApplicationController
 
-  before_action :authenticate_user!
+  before_action :require_authentication
+
+  def index
+    @user_id = current_user.id
+    user = User.find_by(id: current_user.id)
+    @account = user.accounts.find_by(user_id: current_user.id)
+    if @account
+      @account_id = @account.id
+      @accounts = Account.all
+    end
+  end
 
   def create
     return head :unprocessable_entity unless Account.open(account_params)
-    render status: :created
+    redirect_to root_path, notice: "Created!"
   end
 
   def deposit
@@ -35,12 +45,16 @@ class AccountsController < ApplicationController
 
   private
   def account_params
-    params.require(:account).permit(:name, :user_id)
+    params.require(:account).permit(:name, :user_id, :balance)
   end
 
   def amount
     param = params.permit(:amount)
     param[:amount].to_f
+  end
+
+  def require_authentication
+    redirect_to login_path unless current_user
   end
 
 end

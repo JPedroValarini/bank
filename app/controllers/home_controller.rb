@@ -5,7 +5,6 @@ class HomeController < ApplicationController
   end
 
   private
-
   def require_authentication
     redirect_to login_path unless current_user
   end

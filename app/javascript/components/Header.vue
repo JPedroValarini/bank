@@ -2,9 +2,9 @@
   <nav class="navbar navbar-expand-lg navbar-light bg-light justify-content-end">
     <div class="d-flex">
       <div class="container">
-        <a class="navbar-brand" href="#">Home</a>
+        <a class="navbar-brand" href="#" @click="redirect('/teste')">Account</a>
       </div>
-      <div class="collapse navbar-collapse container" id="navbarNav">
+      <div class="container" id="navbarNav">
         <ul class="navbar-nav">
           <li class="nav-item">
             <button class="btn btn-outline-secondary" @click="logout()">Logout</button>
@@ -33,6 +33,9 @@ export default {
       .catch(error => {
         console.error(error.response.data);
       });
+    },
+    redirect(url) {
+      window.location.href = url;
     }
   }
 }

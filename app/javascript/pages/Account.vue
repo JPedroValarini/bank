@@ -1,55 +1,47 @@
 <template>
-  <div>
+  <div id="app">
     <h1>Accounts</h1>
     <form @submit.prevent="createAccount">
       <label>
         Name:
         <input type="text" v-model="name">
       </label>
-      <label>
-        User ID:
-        <input type="text" v-model="userId">
-      </label>
       <button type="submit">Create account</button>
     </form>
     <br>
     <form @submit.prevent="deposit">
       <label>
-        Account ID:
-        <input type="text" v-model="accountId">
-      </label>
-      <label>
         Amount:
-        <input type="number" step="0.01" v-model="amount">
+        <input type="number" step="0.01" v-model="amountDeposit">
       </label>
       <button type="submit">Deposit</button>
     </form>
     <br>
     <form @submit.prevent="withdraw">
       <label>
-        Account ID:
-        <input type="text" v-model="accountId">
-      </label>
-      <label>
         Amount:
-        <input type="number" step="0.01" v-model="amount">
+        <input type="number" step="0.01" v-model="amountWithdraw">
       </label>
       <button type="submit">Withdraw</button>
     </form>
     <br>
     <form @submit.prevent="transfer">
       <label>
-        Account ID:
-        <input type="text" v-model="accountId">
-      </label>
-      <label>
         Recipient ID:
-        <input type="text" v-model="recipientId">
+        <select v-model="selectedAccountId">
+          <option v-for="account in JSON.parse(accounts_id)" :value="account.id">{{ account.name }}</option>
+        </select>
       </label>
       <label>
         Amount:
-        <input type="number" step="0.01" v-model="amount">
+        <input type="number" step="0.01" v-model="amountTransfer">
       </label>
+      <label>
+        Recipient ID:
+        <input type="hidden" v-model="selectedAccountId">
+        <span>{{ selectedAccountId }}</span>
+      </label>
+
       <button type="submit">Transfer</button>
     </form>
   </div>
@@ -59,60 +51,102 @@
 import axios from 'axios'
 
 export default {
+  props: {
+    current_user_id: {
+      type: String,
+      required: false
+    },
+    current_account_id: {
+      type: String,
+      required: false
+    },
+    accounts_id: {
+      type: String,
+      required: false
+    },
+  },
   data() {
     return {
       name: '',
       userId: '',
       accountId: '',
       recipientId: '',
-      amount: 0
+      amount: 0,
+      amountDeposit: 0,
+      amountWithdraw: 0,
+      amountTransfer: 0,
+      balance: 0,
+      selectedAccountId: '',
+      accountInfo: null
     }
+  },
+  created() {
   },
   methods: {
     createAccount() {
-      axios.post('/accounts', {
-        account: {
-          name: this.name,
-          user_id: this.userId
+      axios.post('/accounts/create', { name: this.name, user_id: this.current_user_id, balance: this.balance }, {
+        headers: {
+          'Content-Type': "application/json",
+          'X-CSRF-Token' : document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
         }
       })
       .then(response => {
-        console.log(response.data)
+        window.toastr.success('Conta criada com sucesso!')
         this.name = ''
         this.userId = ''
       })
       .catch(error => {
+        window.toastr.error('Não foi possivel criar sua conta!')
+      })
+    },
+    deposit() {
+      axios.put(`/accounts/${this.current_account_id}/deposit`, { account: this.current_account_id, amount: this.amountDeposit }, {
+        headers: {
+          'Content-Type': "application/json",
+          'X-CSRF-Token' : document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+        }
+      })
+      .then(response => {
+        console.log(response.data)
+        window.toastr.success('Desposito realizado com sucesso!')
+      })
+      .catch(error => {
+        window.toastr.error('Não foi possivel realizar seu deposito.')
         console.log(error.response.data)
       })
     },
-    async deposit(accountId, amount) {
-      try {
-        const response = await axios.put(`/accounts/${accountId}/deposit`, { amount: amount });
-        return response.data.deposited;
-      } catch (error) {
-        console.error(error);
-        return false;
-      }
+    withdraw() {
+      axios.put(`/accounts/${this.current_account_id}/withdraw`, { account: this.current_account_id, amount: this.amountWithdraw }, {
+        headers: {
+          'Content-Type': "application/json",
+          'X-CSRF-Token' : document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+        }
+      })
+      .then(response => {
+        console.log(response.data)
+        window.toastr.success('Saque realizado com sucesso!')
+      })
+      .catch(error => {
+        console.log(error.response.data)
+        window.toastr.error('Não foi possivel realizar seu saque.')
+      })
     },
-
-    async withdraw(accountId, amount) {
-      try {
-        const response = await axios.put(`/accounts/${accountId}/withdraw`, { amount: amount });
-        return response.data.withdrawn;
-      } catch (error) {
-        console.error(error);
-        return false;
-      }
+    transfer() {
+      axios.put(`/accounts/${this.current_account_id}/transfer`, { account: this.current_account_id, amount: this.amountTransfer, recipient_id: this.selectedAccountId }, {
+        headers: {
+          'Content-Type': "application/json",
+          'X-CSRF-Token' : document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+        }
+      })
+      .then(response => {
+        console.log(response.data)
+        window.toastr.success('Transferência realizada com sucesso!')
+      })
+      .catch(error => {
+        console.log(error.response.data)
+        window.toastr.error('Não foi possivel realizar sua transferência.')
+      })
     },
-
-    async transfer(accountId, recipientId, amount) {
-      try {
-        const response = await axios.put(`/accounts/${accountId}/transfer`, { recipient_id: recipientId, amount: amount });
-        return response.data.transferred;
-      } catch (error) {
-        console.error(error);
-        return false;
-      }
-    }
   }
 }
+</script>
