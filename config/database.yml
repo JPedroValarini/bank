@@ -81,7 +81,4 @@ test:
 # for a full overview on how database connection configuration can be specified.
 #
 production:
-  <<: *default
-  database: bank_production
-  username: bank
-  password: <%= ENV['BANK_DATABASE_PASSWORD'] %>
+  url: <%= ENV['DATABASE_URL'] %>
