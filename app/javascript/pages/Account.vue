@@ -95,7 +95,9 @@ export default {
     }
   },
   created() {
-    this.accountData = JSON.parse(this.account_info)
+    if (this.accountData){
+      this.accountData = JSON.parse(this.account_info)
+    }
   },
   methods: {
     createAccount() {
@@ -109,6 +111,7 @@ export default {
         window.toastr.success('Conta criada com sucesso!')
         this.name = ''
         this.userId = ''
+        window.location.reload();
       })
       .catch(error => {
         window.toastr.error('Não foi possivel criar sua conta!')
@@ -124,6 +127,7 @@ export default {
       .then(response => {
         console.log(response.data)
         window.toastr.success('Desposito realizado com sucesso!')
+        this.amountDeposit = ''
       })
       .catch(error => {
         window.toastr.error('Não foi possivel realizar seu deposito.')
@@ -140,6 +144,7 @@ export default {
       .then(response => {
         console.log(response.data)
         window.toastr.success('Saque realizado com sucesso!')
+        this.amountWithdraw = ''
       })
       .catch(error => {
         console.log(error.response.data)
@@ -155,6 +160,7 @@ export default {
       })
       .then(response => {
         console.log(response.data)
+        this.amountTransfer = ''
         window.toastr.success('Transferência realizada com sucesso!')
       })
       .catch(error => {

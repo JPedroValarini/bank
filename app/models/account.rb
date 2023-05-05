@@ -3,6 +3,8 @@ class Account < ApplicationRecord
 
   validates_presence_of :name, :user_id, :balance
 
+  validate :user_has_no_accounts, on: :create
+
   def self.open(params)
     account = new(params)
     puts "Creating a account with #{account.attributes}"
@@ -11,7 +13,6 @@ class Account < ApplicationRecord
 
   def self.deposit(account, amount)
     puts "Depositing #{amount} on account #{account.id}"
-
     return false unless self.valid_deposit?(amount)
     account.balance = (account.balance += amount).round(2)
     account.save!
@@ -35,6 +36,11 @@ class Account < ApplicationRecord
   end
 
   private
+
+  def user_has_no_accounts
+    errors.add(:user, 'already has an account') if user.accounts.present?
+  end
+
   def self.amount_valid?(account, amount, tax = 0)
     if amount <= 0
       puts 'Transaction failed! Amount must be greater than 0.00'
