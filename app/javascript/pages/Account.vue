@@ -1,13 +1,17 @@
 <template>
   <div id="app">
     <Header />
-    <h1>Accounts</h1>
+    <h1>Conta</h1>
+    <h4>{{this.accountData.name}}</h4>
+    <h3>
+      Saldo Atual: {{this.accountData.balance}}
+    </h3>
     <form @submit.prevent="createAccount">
       <label>
         Name:
         <input type="text" v-model="name">
       </label>
-      <button type="submit">Create account</button>
+      <button type="submit">Criar conta</button>
     </form>
     <br>
     <form @submit.prevent="deposit">
@@ -66,6 +70,10 @@ export default {
       type: String,
       required: false
     },
+    account_info: {
+      type: String,
+      required: false
+    },
   },
   components: {
     Header
@@ -82,10 +90,12 @@ export default {
       amountTransfer: 0,
       balance: 0,
       selectedAccountId: '',
-      accountInfo: null
+      accountInfo: null,
+      accountData: ''
     }
   },
   created() {
+    this.accountData = JSON.parse(this.account_info)
   },
   methods: {
     createAccount() {

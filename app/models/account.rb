@@ -29,8 +29,8 @@ class Account < ApplicationRecord
     tax = self.handle_taxes(amount)
     return false unless self.amount_valid?(account, amount, tax)
     ActiveRecord::Base.transaction do
-      self.withdraw(account, amount)
-      self.deposit(recipient, amount)
+      self.withdraw(account, amount + tax)
+      self.deposit(recipient, amount + tax)
     end
   end
 
@@ -56,11 +56,18 @@ class Account < ApplicationRecord
     end
   end
 
-  def self.handle_taxes(amount)
+  def self.handle_taxes(amount, datetime = Time.now)
     if amount >= 1000
       10
+    elsif datetime.monday? || datetime.tuesday? || datetime.wednesday? || datetime.thursday? || datetime.friday?
+      if datetime.in_time_zone("Brasilia").hour.between?(9, 18)
+        5
+      else
+        7
+      end
     else
-      0
+      7
     end
   end
+
 end
