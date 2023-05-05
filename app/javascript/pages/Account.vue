@@ -1,5 +1,6 @@
 <template>
   <div id="app">
+    <Header />
     <h1>Accounts</h1>
     <form @submit.prevent="createAccount">
       <label>
@@ -49,6 +50,7 @@
 
 <script>
 import axios from 'axios'
+import Header from '../components/Header'
 
 export default {
   props: {
@@ -64,6 +66,9 @@ export default {
       type: String,
       required: false
     },
+  },
+  components: {
+    Header
   },
   data() {
     return {

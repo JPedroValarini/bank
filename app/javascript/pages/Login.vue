@@ -24,7 +24,7 @@
                     </div>
                     <p class="small mb-5 pb-lg-2"><a class="text-white-50" href="#!">Esqueceu a senha?</a></p>
 
-                    <button class="btn btn-outline-light btn-lg px-5" type="submit" @click="login">Login</button>
+                    <button class="btn btn-outline-light btn-lg px-5" type="submit">Login</button>
                   </form>
 
                   <div class="d-flex justify-content-center text-center mt-4 pt-1">
@@ -73,8 +73,7 @@ export default {
         }
       })
       .catch(error => {
-        // Handle error response
-        console.error(error.response.data);
+        window.toastr.error('Não foi possivel fazer o login, verifique seu usuário e senha.')
       });
     },
     createAccount() {

@@ -7,8 +7,9 @@ class AccountsController < ApplicationController
     user = User.find_by(id: current_user.id)
     @account = user.accounts.find_by(user_id: current_user.id)
     if @account
+      @account
       @account_id = @account.id
-      @accounts = Account.all
+      @accounts = Account.where.not(id: @account_id)
     end
   end
 

@@ -11,21 +11,23 @@ class Account < ApplicationRecord
 
   def self.deposit(account, amount)
     puts "Depositing #{amount} on account #{account.id}"
-    return false unless self.amount_valid?(amount)
+
+    return false unless self.valid_deposit?(amount)
     account.balance = (account.balance += amount).round(2)
     account.save!
   end
 
   def self.withdraw(account, amount)
     puts "Withdrawing #{amount} on account #{account.id}"
-    return false unless self.amount_valid?(amount)
+    return false unless self.amount_valid?(account, amount)
     account.balance = (account.balance -= amount).round(2)
     account.save!
   end
 
   def self.transfer(account, recipient, amount)
     puts "Transfering #{amount} from account #{account.id} to account #{recipient.id}"
-    return false unless self.amount_valid?(amount)
+    tax = self.handle_taxes(amount)
+    return false unless self.amount_valid?(account, amount, tax)
     ActiveRecord::Base.transaction do
       self.withdraw(account, amount)
       self.deposit(recipient, amount)
@@ -33,12 +35,32 @@ class Account < ApplicationRecord
   end
 
   private
-  def self.amount_valid?(amount)
+  def self.amount_valid?(account, amount, tax = 0)
     if amount <= 0
       puts 'Transaction failed! Amount must be greater than 0.00'
       return false
+    elsif amount + tax > account.balance 
+      puts 'Transaction failed! Amount must be less than balance'
+      return false
+    else
+      return true
     end
-    return true
   end
 
+  def self.valid_deposit?(amount)
+    if amount <= 0
+      puts 'Transaction failed! Amount must be greater than 0.00'
+      return false
+    else
+      return true
+    end
+  end
+
+  def self.handle_taxes(amount)
+    if amount >= 1000
+      10
+    else
+      0
+    end
+  end
 end
