@@ -95,7 +95,7 @@ export default {
     }
   },
   created() {
-    if (this.accountData){
+    if (this.account_info){
       this.accountData = JSON.parse(this.account_info)
     }
   },
@@ -127,7 +127,7 @@ export default {
       .then(response => {
         console.log(response.data)
         window.toastr.success('Desposito realizado com sucesso!')
-        this.amountDeposit = ''
+        this.reloadPage()
       })
       .catch(error => {
         window.toastr.error('Não foi possivel realizar seu deposito.')
@@ -144,7 +144,7 @@ export default {
       .then(response => {
         console.log(response.data)
         window.toastr.success('Saque realizado com sucesso!')
-        this.amountWithdraw = ''
+        this.reloadPage()
       })
       .catch(error => {
         console.log(error.response.data)
@@ -160,14 +160,19 @@ export default {
       })
       .then(response => {
         console.log(response.data)
-        this.amountTransfer = ''
         window.toastr.success('Transferência realizada com sucesso!')
+        this.reloadPage()
       })
       .catch(error => {
         console.log(error.response.data)
         window.toastr.error('Não foi possivel realizar sua transferência.')
       })
     },
+    reloadPage() {
+      setTimeout(function() {
+        window.location.reload();
+      }, 500);
+    }
   }
 }
 </script>
