@@ -83,6 +83,6 @@ test:
 production:
   <<: *default
   url: <%= ENV["DATABASE_URL"] %>
-  database: bank_production
-  username: bank
+  database: postgres_fot4
+  username: postgres_fot4_user
   password: <%= ENV["BANK_DATABASE_PASSWORD"] %>

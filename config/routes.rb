@@ -10,11 +10,10 @@ Rails.application.routes.draw do
     end
   end
 
-  root 'home#index'
-  get '/', to: 'home#index', as: '/'
+  root 'accounts#index'
   get 'register', to: 'register#index', as: 'register'
   get 'login', to: 'login#index', as: 'login'
-  get 'teste', to: 'accounts#index', as: 'teste'
+  get 'account', to: 'accounts#index', as: 'account'
   
   #POST
   post 'accounts/create', to: 'accounts#create', as: 'accounts/create'

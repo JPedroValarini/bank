@@ -7,6 +7,7 @@ class AccountsController < ApplicationController
     user = User.find_by(id: current_user.id)
     @account = user.accounts.find_by(user_id: current_user.id)
     if @account
+      @transactions = @account.transactions
       @account
       @account_id = @account.id
       @accounts = Account.where.not(id: @account_id)
@@ -35,7 +36,6 @@ class AccountsController < ApplicationController
   def transfer
     account = Account.find(params[:id])
     return head :not_found unless account
-
     recipient_param = params.permit(:recipient_id)
     recipient = Account.find(recipient_param[:recipient_id])
     return head :not_found unless recipient

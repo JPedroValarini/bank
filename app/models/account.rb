@@ -1,5 +1,8 @@
 class Account < ApplicationRecord
   belongs_to :user
+  has_many :transactions
+
+  validates :name, presence: true, length: {maximum: 20}, uniqueness: {case_sensitive: false}
 
   validates_presence_of :name, :user_id, :balance
 
@@ -16,6 +19,7 @@ class Account < ApplicationRecord
     return false unless self.valid_deposit?(amount)
     account.balance = (account.balance += amount).round(2)
     account.save!
+    Transaction.create(account: account, amount:amount, transaction_type: 'deposit')
   end
 
   def self.withdraw(account, amount)
@@ -23,6 +27,7 @@ class Account < ApplicationRecord
     return false unless self.amount_valid?(account, amount)
     account.balance = (account.balance -= amount).round(2)
     account.save!
+    Transaction.create(account: account, amount:amount, transaction_type: 'withdraw')
   end
 
   def self.transfer(account, recipient, amount)
@@ -32,6 +37,7 @@ class Account < ApplicationRecord
     ActiveRecord::Base.transaction do
       self.withdraw(account, amount + tax)
       self.deposit(recipient, amount + tax)
+      Transaction.create(account: account, recipient_id: recipient.id, amount:amount, transaction_type: 'transfer')
     end
   end
 

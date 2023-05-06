@@ -1,23 +1,54 @@
 <template>
-  <div id="app" class="container d-flex justify-content-center align-items-center vh-100">
-    <div class="card">
-      <div class="card-body">
-        <h2 class="text-center mb-4">Registrar</h2>
-        <form>
-          <div class="form-group">
-            <label>Email</label>
-            <input type="text" v-model="email" class="form-control" placeholder="Seu email">
+  <div id="app">
+    <section class="vh-100 gradient-custom">
+      <div class="container py-5 h-100">
+        <div class="row d-flex justify-content-center align-items-center h-100">
+          <div class="col-12 col-md-8 col-lg-6 col-xl-5 d-flex justify-content-center">
+            <div class="card bg-dark text-white" style="border-radius: 1rem">
+              <div class="card-body p-5 text-center">
+                <div class="mb-md-5 mt-md-4 pb-5">
+                  <h2 class="fw-bold mb-2 text-uppercase">Registro</h2>
+                  <p class="text-white-50 mb-5">
+                    Por favor Registre com seu e-mail e senha!
+                  </p>
+
+                  <form>
+                    <div class="form-outline form-white mb-4">
+                      <input
+                        type="email"
+                        id="typeEmailX"
+                        class="form-control form-control-lg"
+                        v-model="email"
+                      />
+                      <label class="form-label" for="typeEmailX">Email</label>
+                    </div>
+                    <div class="form-outline form-white mb-4">
+                      <input
+                        type="password"
+                        id="typePasswordX"
+                        class="form-control form-control-lg"
+                        v-model="password"
+                      />
+                      <label class="form-label" for="typePasswordX">Senha</label>
+                    </div>
+                    <button
+                      type="submit"
+                      v-on:click.prevent="register"
+                      class="btn btn-primary px-4"
+                    >
+                      Registrar
+                    </button>
+                  </form>
+                  <a class="mt-3" type="submit" v-on:click.prevent="backLogin">
+                    Voltar
+                  </a>
+                </div>
+              </div>
+            </div>
           </div>
-          <div class="form-group">
-            <label>Senha</label>
-            <input type="password" v-model="password" class="form-control" placeholder="Sua senha">
-          </div>
-          <div class="text-center">
-            <button type="submit" v-on:click.prevent="register" class="btn btn-primary px-4">Entrar</button>
-          </div>
-        </form>
+        </div>
       </div>
-    </div>
+    </section>
   </div>
 </template>
 
@@ -26,7 +57,7 @@ export default {
   data() {
     return {
       email: "",
-      password: ""
+      password: "",
     };
   },
   methods: {
@@ -34,30 +65,38 @@ export default {
       fetch("/users/create", {
         method: "POST",
         headers: {
-            'Content-Type': "application/json",
-            'X-CSRF-Token' : document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+          "Content-Type": "application/json",
+          "X-CSRF-Token": document
+            .querySelector('meta[name="csrf-token"]')
+            .getAttribute("content"),
         },
         body: JSON.stringify({
           email: this.email,
-          password: this.password
-        })
+          password: this.password,
+        }),
       })
-        .then(response => {
+        .then((response) => {
           if (response.ok) {
-            window.location.href = '/login';
+            window.location.href = "/login";
             return response.json();
           } else {
-            throw new Error("Erro ao tentar fazer register");
+            window.toastr.error("Não foi possivel criar o usuário");
+            this.email = "";
+            this.password = "";
+            throw new Error("Error");
           }
         })
-        .then(data => {
-          window.location.href = '/';
+        .then((data) => {
+          window.location.href = "/";
         })
-        .catch(error => {
+        .catch((error) => {
           console.error(error);
         });
-    }
-  }
+    },
+    backLogin() {
+      window.location.href = "/login";
+    },
+  },
 };
 </script>
 

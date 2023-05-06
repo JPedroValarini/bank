@@ -1,7 +1,6 @@
 import Vue from 'vue/dist/vue.esm'
 import App from '../app.vue'
 import Register from '../pages/Register'
-import Home from '../pages/Home'
 import Login from '../pages/Login'
 import Account from '../pages/Account'
 import Header from '../components/Header'
@@ -15,6 +14,6 @@ document.addEventListener('DOMContentLoaded', () => {
       return {
       };
     },
-      components: { App, Register, Home, Login, Header, Account }
+      components: { App, Register, Login, Header, Account }
   })
 })
